@@ -8,9 +8,9 @@ This is a simple real time chat application built in django which uses websocket
 </p>
 
 
-<p align="center">
+<h1 align="center">
   View <a href="http://www.vishchat.in/">Live demo</a>.
-</p>
+</h1>
 
 ## Installation
 
