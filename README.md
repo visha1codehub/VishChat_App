@@ -3,7 +3,7 @@
 This is a simple real time chat application built in django which uses websocket protocol...
 <p>
 
-![Alt text](https://github.com/visha1codehub/VishChat_App/blob/master/static/images/bg1.jpg?raw=true "Screeshot")
+![Alt text](https://github.com/visha1codehub/VishChat_App/blob/master/screenshots/vishchat_screenshot.png?raw=true "Screeshot")
 
 </p>
 
