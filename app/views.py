@@ -63,6 +63,6 @@ def home(request):
 @login_required(login_url='login')
 def room(request, roomName):
     room, created = Room.objects.get_or_create(name=roomName)
-    messages = [] if created else room.message_set.all()
-    context = {'roomName':roomName, 'messages':messages}     
+    room_messages = [] if created else room.message_set.all()
+    context = {'roomName':roomName, 'room_messages':room_messages}     
     return render(request, 'app/room.html', context)

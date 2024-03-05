@@ -7,7 +7,7 @@
 <div class="container">
     <h1>Room Name: {{roomName | capfirst}}</h1>
     <ul class="list-group" id="chat-list" style='overflow:scroll;overflow-x:hidden;max-height:400px;'>
-        {% for msg in messages %}
+        {% for msg in room_messages %}
         <li class="list-group-item" style="background-color: #8ecae6;" >{{msg.owner.username}} : {{msg.body}}</li>
         {% endfor %}
     </ul>
