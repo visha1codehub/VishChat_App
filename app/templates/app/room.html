@@ -1,0 +1,81 @@
+{% extends "main.html" %}
+
+{% block title %}Room: {{roomName | capfirst}}{% endblock title %}
+
+{% block content %}
+
+<div class="container">
+    <h1>Room Name: {{roomName | capfirst}}</h1>
+    <ul class="list-group" id="chat-list" style='overflow:scroll;overflow-x:hidden;max-height:400px;'>
+        {% for msg in messages %}
+        <li class="list-group-item" style="background-color: #8ecae6;" >{{msg.owner.username}} : {{msg.body}}</li>
+        {% endfor %}
+    </ul>
+<br>
+    <div class="input-group mb-3">
+        <input type="text" class="form-control" id="chat-input" required placeholder="Enter message here..." aria-describedby="button-addon2" style="background-color: #669bbc;">
+        <input class="btn btn-outline-secondary" type="submit" id="chat-button" style="background-color: #023047;"></input>
+    </div>
+</div>
+{{roomName | json_script:"room-name"}}
+<script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
+ <script>
+    room_name = JSON.parse(document.getElementById('room-name').textContent)
+    const ws = new WebSocket(`ws://${window.location.host}/ws/${room_name}/`)
+    ws.onopen = () => {
+        console.log("Connection Successfull!!!");
+    }
+
+    ws.onmessage = (event) => {
+        data = JSON.parse(event['data'])
+        msg = data['msg']
+        user = data['user']
+        // console.log(`Recieved from the ${user}...`);
+        console.log(msg)
+        ul = document.getElementById('chat-list')
+        // console.log(ul)
+        let li = document.createElement('li')
+        li.setAttribute('class', 'list-group-item')
+        li.setAttribute('style', "background-color: #8ecae6;")
+        li.innerHTML = `${user} : ${msg}` 
+        ul.appendChild(li)
+        $('#chat-list').scrollTop($('#chat-list')[0].scrollHeight);
+    }
+    
+    ws.onclose = () => {
+        console.log("Websocket connection is closed!!!");
+    }
+
+    document.getElementById('chat-button').onclick = (event) => {
+        const messageInputDom = document.getElementById('chat-input')
+        let message = messageInputDom.value
+        message = message.trim()
+        if (message){
+            ws.send(JSON.stringify({
+                'msg' : message
+            }))
+            messageInputDom.value = ""
+        }
+      } 
+      $(document).ready(function(){
+        $("#chat-input").keypress(function(e){
+            // console.log(typeof e.keyCode)
+            if (e.keyCode === 13){
+                e.preventDefault()
+                let mj = $("#chat-input").val().trim()
+                if (mj){
+                    ws.send(JSON.stringify({
+                        'msg' : mj
+                    }))
+                }
+                $("#chat-input").val("")
+            }
+        });
+        // $('#chat-list').scrollTop($('#chat-list')[0].scrollHeight);
+         $("#chat-list").animate({ scrollTop: $("#chat-list").prop("scrollHeight")}, 1000);
+    })
+
+ </script>
+
+
+{% endblock content %}

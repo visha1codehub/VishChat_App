@@ -1,0 +1,24 @@
+{% extends "main.html" %}
+
+{% block title %}VishChat App{% endblock title %}
+
+{% block content %}
+<div class="container">
+  <h1>Welcome to VishChat!</h1><br>
+{% if request.user.is_authenticated %}
+<form class="row g-3" method="POST" action="">
+    {% csrf_token %}
+    <div class="col-auto">
+      <input type="text" class="form-control" name="roomName" required id="roomname" placeholder="Enter room's name here..." style="background-color: #90e0ef;">
+    </div>
+    <div class="col-auto">
+      <button type="submit" class="btn btn-outline-dark mb-3">Join Room</button>
+    </div>
+  </form>
+{% else %}
+    <h2>Login to join a Room...
+    <a href="{% url 'login' %}">Login</a></h2>
+{% endif %}
+</div>
+
+{% endblock content %}
